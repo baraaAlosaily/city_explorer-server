@@ -8,37 +8,25 @@ app.use(cors()); // after you initialize your express app instance
 // a server endpoint
 require('dotenv').config();
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 app.get('/test', (req, res) => {
   let str = 'hello from back end ';
   res.send(str);
 });
 
-class Forcast {
-  constructor(object) {
-    this.description = `low of: ${object.low_temp} and high of ${object.max_temp} with a ${object.weather.description}`;
-    this.date = object.valid_date;
-  }
-}
 app.get('/weather', (req, res) => {
-  const latitude = req.query.lat;
-  const longitude = req.query.lon;
-  const weatherArray = weatherdata.find((item) => {
-    if ((latitude == item.lon && longitude == item.lat) || item.city_name) {
-      return item;
-    }
-  });
-  try {
-    let forcast = weatherArray.data.map((item) => {
-      return new Forcast(item);
-    });
-    res.send(forcast);
-  } catch {
-    res.status(404).send('OPPS');
-  }
+  const resposeData = weatherdata.data.map((obj) => new Weather(obj));
+  res.json(resposeData);
 });
 
-app.listen(port, () => {
-  console.log(`Up and running on PORT ${port}`);
+class Weather {
+  constructor(weatherdata) {
+    this.description = weatherdata.weather.description;
+    this.date = weatherdata.valid_date;
+  }
+}
+
+app.listen(PORT, () => {
+  console.log(`Server started on ${PORT}`);
 }); // kick start the express server to work
