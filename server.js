@@ -32,7 +32,6 @@ app.get('/weather', (req, res) => {
       .catch((error) => {
         res.send(error.message);
       });
-    res.json(resposeData);
   } else {
     res.send('Please Enter Proper Lat &Lon ');
   }
