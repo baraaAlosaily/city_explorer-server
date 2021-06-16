@@ -3,12 +3,15 @@ const app = express(); // initialize your express app instance
 
 const cors = require('cors');
 const weatherdata = require('./data/weather.json');
+const axios = require('axios');
+const { response } = require('express');
 
 app.use(cors()); // after you initialize your express app instance
 // a server endpoint
 require('dotenv').config();
 
 const PORT = process.env.PORT || 4000;
+const WEATHER_BIT_KEY = process.env.WEATHER_BIT_KEY;
 
 app.get('/test', (req, res) => {
   let str = 'hello from back end ';
@@ -16,8 +19,23 @@ app.get('/test', (req, res) => {
 });
 
 app.get('/weather', (req, res) => {
-  const resposeData = weatherdata.data.map((obj) => new Weather(obj));
-  res.json(resposeData);
+  const lat = req.query.lat;
+  const lon = req.query.lon;
+  if (lat && lon) {
+    const weatherBitUrl = `https://api.weatherbit.io/v2.0/forecast/daily?key=${WEATHER_BIT_KEY}&lat=${lat}&lon=${lon}`;
+    axios
+      .get(weatherBitUrl)
+      .then((response) => {
+        const resposeData = response.data.data.map((obj) => new Weather(obj));
+        res.json(resposeData);
+      })
+      .catch((error) => {
+        res.send(error.message);
+      });
+    res.json(resposeData);
+  } else {
+    res.send('Please Enter Proper Lat &Lon ');
+  }
 });
 
 class Weather {
