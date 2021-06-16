@@ -22,7 +22,7 @@ app.get('/weather', (req, res) => {
   const lat = req.query.lat;
   const lon = req.query.lon;
   if (lat && lon) {
-    const weatherBitUrl = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_BIT_KEY}&lat=${lat}&lon=${lon}`;
+    const weatherBitUrl = `https://api.weatherbit.io/v2.0/forecast/daily?key=${WEATHER_BIT_KEY}&lat=${lat}&lon=${lon}`;
     axios
       .get(weatherBitUrl)
       .then((response) => {
