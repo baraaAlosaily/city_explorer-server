@@ -31,7 +31,7 @@ app.get('/weather', (req, res) => {
         res.json(resposeData);
       })
       .catch((error) => {
-        res.send('error message');
+        res.send('error message', error.message);
       });
   } else {
     res.send('Please Enter Proper Lat &Lon ');
@@ -76,11 +76,11 @@ class Movie {
   constructor(
     title,
     overview,
-    averageVotes,
-    totalVotes,
-    imgUrl,
+    average_votes,
+    total_votes,
+    image_url,
     popularity,
-    releasedOn
+    released_on
   ) {
     this.title = title;
     this.overview = overview;
